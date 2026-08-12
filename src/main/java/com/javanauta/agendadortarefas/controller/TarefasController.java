@@ -4,6 +4,7 @@ package com.javanauta.agendadortarefas.controller;
 import com.javanauta.agendadortarefas.business.TarefasService;
 import com.javanauta.agendadortarefas.business.dto.TarefasDTO;
 import com.javanauta.agendadortarefas.business.mapper.TarefasConverter;
+import com.javanauta.agendadortarefas.infrastructure.enums.StatusNotificacao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +41,23 @@ public class TarefasController {
     public ResponseEntity<List<TarefasDTO>> buscaTarefasPorEmail(@RequestHeader("Authorization") String token) {
         List<TarefasDTO> tarefas = tarefasService.buscaTarefasPorEmail(token);
         return ResponseEntity.ok(tarefas);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deletaTarefasPorId(@RequestParam("id") String id) {
+        tarefasService.deletaTarefasPorId(id);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping
+    public ResponseEntity<TarefasDTO> alteraStatusNotificacao(@RequestParam("status") StatusNotificacao status,
+                                                              @RequestParam("id") String id) {
+        return ResponseEntity.ok(tarefasService.alteraStatus(status, id));
+    }
+
+    @PutMapping
+    public ResponseEntity<TarefasDTO> updateTarefas(@RequestBody TarefasDTO dto, @RequestParam("id") String id) {
+        return ResponseEntity.ok(tarefasService.updateTarefas(dto, id));
     }
 }
